@@ -11,10 +11,28 @@ st.set_page_config(page_title="HCMC Traffic Dashboard", layout="wide")
 st.title("🚦 Dashboard Phân Tích & Dự Báo Giao Thông TP.HCM")
 st.markdown("**Module:** Integration, Dashboard & Report")
 
-# Sidebar: Nhập dữ liệu
+# --- Sidebar: Nhập dữ liệu ---
 st.sidebar.header("Dữ Liệu Đầu Vào")
-uploaded_flow = st.sidebar.file_uploader("Tải file hcmc_flow.csv", type="csv")
-uploaded_pred = st.sidebar.file_uploader("Tải file prediction.csv", type="csv")
+
+# Tự động tìm file trong thư mục trước
+try:
+    flow_df = pd.read_csv("hcmc_flow.csv")
+    st.sidebar.success("Đã tự động tải hcmc_flow.csv từ hệ thống")
+    uploaded_flow = True # Đánh dấu là đã có file
+except:
+    uploaded_flow = st.sidebar.file_uploader("Tải file hcmc_flow.csv", type="csv")
+
+try:
+    pred_df = pd.read_csv("prediction.csv")
+    st.sidebar.success("Đã tự động tải prediction.csv từ hệ thống")
+    uploaded_pred = True
+    
+    # [Giả lập] Tạo dữ liệu Sensor-only nếu chưa có
+    if 'y_pred_sensor' not in pred_df.columns:
+        np.random.seed(42)
+        pred_df['y_pred_sensor'] = pred_df['y_true'] + np.random.normal(0, 25, size=len(pred_df))
+except:
+    uploaded_pred = st.sidebar.file_uploader("Tải file prediction.csv", type="csv")
 
 # --- 1. Xử lý dữ liệu ---
 if uploaded_flow and uploaded_pred:
@@ -106,4 +124,5 @@ if uploaded_flow and uploaded_pred:
     st.download_button("Tải xuống dữ liệu đã xử lý (CSV)", csv, "processed_traffic_data.csv", "text/csv")
 
 else:
+
     st.info("Vui lòng tải lên cả 2 file 'hcmc_flow.csv' và 'prediction.csv' ở thanh bên trái để bắt đầu.")
