@@ -106,10 +106,8 @@ if flow_df is not None and pred_df is not None:
     col_video, col_stats = st.columns([2, 1])
     
     with col_video:
-        # Link ảnh Online để tránh lỗi mất file
-        st.image("https://images.unsplash.com/photo-1566236402379-3731885567c9?auto=format&fit=crop&w=800", 
-                 caption="Camera Feed (Mô phỏng - Nguồn: Unsplash)", 
-                 use_container_width=True)
+        # Placeholder cho video
+        st.image("traffic_sample.jpg", caption="Camera Feed (Local)", use_container_width=True)
     
     with col_stats:
         st.subheader("Trạng thái Live")
@@ -146,3 +144,4 @@ if flow_df is not None and pred_df is not None:
 else:
     # Nếu chưa có dữ liệu thì hiện hướng dẫn
     st.info("👋 Chào bạn! Vui lòng tải file 'hcmc_flow.csv' và 'prediction.csv' lên (hoặc đảm bảo chúng có sẵn trong thư mục) để bắt đầu.")
+
